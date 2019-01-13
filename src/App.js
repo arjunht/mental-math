@@ -2,14 +2,36 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-const value1 = Math.floor(Math.random() * 100);
-const value2 = Math.floor(Math.random() * 100);
-const value3 = Math.floor(Math.random() * 100);
-const proposedAnswer = Math.floor(Math.random() * 3) + value1 + value2 + value3;
-const numQuestions = 0;
-const numCorrect = 0;
-
 class App extends Component {
+  constructor(props) {
+    super(props);
+    
+    this.value1 = Math.floor(Math.random() * 100);
+    this.value2 = Math.floor(Math.random() * 100);
+    this.value3 = Math.floor(Math.random() * 100);
+    this.proposedAnswer = Math.floor(Math.random() * 3) + this.value1 + this.value2 + this.value3;
+  }
+  state = {
+    numQuestions: 0,
+    numCorrect: 0
+  }
+  updateCounters = (answer) => {
+    let correctAnswer, numCorrectIncrementValue;
+    if(this.proposedAnswer === this.value1 + this.value2 + this.value3){
+      correctAnswer = true;
+    } else {
+      correctAnswer = false;
+    }
+    if(answer === correctAnswer){
+      numCorrectIncrementValue = 1;
+    } else {
+      numCorrectIncrementValue = 0;
+    }
+    this.setState((currentState) => ({
+      numQuestions: currentState.numQuestions + 1,
+      numCorrect: currentState.numCorrect + numCorrectIncrementValue
+    }))
+  }
   render() {
     return (
       <div className="App">
@@ -20,12 +42,12 @@ class App extends Component {
         <div className="game">
           <h2>Mental Math</h2>
           <div className="equation">
-            <p className="text">{`${value1} + ${value2} + ${value3} = ${proposedAnswer}`}</p>
+            <p className="text">{`${this.value1} + ${this.value2} + ${this.value3} = ${this.proposedAnswer}`}</p>
           </div>
-          <button>True</button>
-          <button>False</button>
+          <button onClick={() => {this.updateCounters(true)}}>True</button>
+          <button onClick={() => {this.updateCounters(false)}}>False</button>
           <p className="text">
-            Your Score: {numCorrect}/{numQuestions}
+            Your Score: {this.state.numCorrect}/{this.state.numQuestions}
           </p>
         </div>
       </div>
